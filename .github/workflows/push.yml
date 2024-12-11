@@ -1,0 +1,68 @@
+name: Build and push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  maven-package:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          java-version: 21.2.0
+          distribution: liberica
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+            ${{ runner.os }}-maven-
+            ${{ runner.os }}-
+
+      - name: Run maven build
+        run: mvn package
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          path: target/*.jar
+  deploy-maven-central:
+    if: github.repository_owner == 'assadriaz' && github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'ci skip')
+    needs: [maven-package]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          java-version: 21.2.0
+          distribution: liberica
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+            ${{ runner.os }}-maven-
+            ${{ runner.os }}-
+
+      - name: Release
+        run: |
+          echo "Start release"
+          git checkout main
+          mvn gitflow:release-start gitflow:release-finish \
+                  -DskipTests=true \
+                  -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+                  -DpostReleaseGoals=install \
+                  -DargLine='-DskipTests' -B

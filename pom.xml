@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<gitflow-maven-plugin.version>1.21.0</gitflow-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -47,6 +48,20 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.amashchenko.maven.plugin</groupId>
+				<artifactId>gitflow-maven-plugin</artifactId>
+				<version>${gitflow-maven-plugin.version}</version>
+				<configuration>
+					<allowSnapshots>false</allowSnapshots>
+					<verbose>true</verbose>
+					<commitMessagePrefix>[ci skip]</commitMessagePrefix>
+					<gitFlowConfig>
+						<developmentBranch>main</developmentBranch>
+						<productionBranch>main</productionBranch>
+					</gitFlowConfig>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
