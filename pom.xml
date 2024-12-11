@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.assad.coverter</groupId>
 	<artifactId>osm</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>osm</name>
 	<description>osm converter</description>
 	<url/>
