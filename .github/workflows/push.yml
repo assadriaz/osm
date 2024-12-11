@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4.4.3
         with:
           path: target/*.jar
-  deploy-maven-central:
+  release-package:
     if: github.repository_owner == 'assadriaz' && github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'ci skip')
     needs: [maven-package]
     runs-on: ubuntu-24.04
@@ -60,6 +60,8 @@ jobs:
       - name: Release
         run: |
           echo "Start release"
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
           git checkout main
           mvn gitflow:release-start gitflow:release-finish \
                   -DskipTests=true \
