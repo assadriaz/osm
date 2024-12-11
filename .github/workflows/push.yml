@@ -58,10 +58,14 @@ jobs:
             ${{ runner.os }}-
 
       - name: Release
+        env:
+          PAT: ${{ secrets.GITFLOW_PAT }}
         run: |
           echo "Start release"
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}.git
+
           git checkout main
           mvn gitflow:release-start gitflow:release-finish \
                   -DskipTests=true \
