@@ -57,7 +57,7 @@
 					<allowSnapshots>false</allowSnapshots>
 					<verbose>true</verbose>
 					<commitMessagePrefix>[ci skip]</commitMessagePrefix>
-					<skipUpdateVersion>true</skipUpdateVersion>
+					<commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
 					<gitFlowConfig>
 						<developmentBranch>main</developmentBranch>
 						<productionBranch>main</productionBranch>
