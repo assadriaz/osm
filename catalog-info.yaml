@@ -1,0 +1,19 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: osm
+  description: |
+    osm is an open-source service mesh that provides traffic management, security, and observability.
+  links:
+    - title: Website
+      url: http://osm.org
+    - title: Documentation
+      url: https://osm.org/docs
+    - title: Slack
+      url: #talk-ror
+  annotations:
+    github.com/project-slug: assdriaz/osm
+spec:
+  type: library
+  owner: assadriaz
+  lifecycle: experimental
